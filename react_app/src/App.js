@@ -1,55 +1,73 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import './App.css';
 
-let data = {title: 'Title',
-  message:'this is sample message.'};
+// ステートのマッピング
+function mappingState(state){
+  return state;
+}
 
-const SampleContext = React.createContext(data);
-
+// Appコンポーネント
 class App extends Component {
-  newdata = {title:'新しいタイトル',
-    message: 'これは新しいメッセージです'};
 
   render(){
-    return (
+    return(
       <div>
-        <h1>Context</h1>
-        <Title />
+        <h1>Redux</h1>
         <Message />
-        <SampleContext.Provider value={this.newdata}>
-          <Title />
-          <Message />
-        </SampleContext.Provider>
-        <Title />
-        <Message />
-      </div>
-    )
-  }
-
-}
-
-class Title extends Component {
-  static contextType = SampleContext;
-
-  render(){
-    return (
-      <div>
-        <h2>{this.context.title}</h2>
+        <Button />
       </div>
     )
   }
 }
 
+App = connect()(App);
+
+//メッセージのコンポーネント
 class Message extends Component {
-  static contextType = SampleContext;
+  style = {
+    fontSize:"20pt",
+    padding:"20px 5px"
+  }
+
+  render(){
+    return(
+      <p style={this.style}>
+        {this.props.message}: {this.props.counter}
+      </p>
+    );
+  }
+}
+
+Message = connect(mappingState)(Message);
+
+//　ボタン表示のコンポーネント
+class Button extends Component {
+  style = {
+    fontSize: "16pt",
+    padding: "5px 10px"
+  }
+
+  constructor(props){
+    super(props);
+    this.doAction = this.doAction.bind(this);
+  }
+
+  doAction(e){
+    if(e.shiftKey){
+      this.props.dispatch({ type: 'DECREMENT' });
+    } else {
+      this.props.dispatch({ type: 'INCREMENT' });
+    }
+  }
 
   render(){
     return (
-      <div>
-        <p>{this.context.message}</p>
-      </div>
-    )
+      <button style={this.style} onClick={this.doAction}>Click</button>
+    );
   }
 }
+
+Button = connect()(Button);
 
 export default App;
