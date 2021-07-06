@@ -26,13 +26,11 @@ class Item extends Component {
   }
 
   render(){
-    let d = this.props.value.created;
-    let f = d.getHours() + ':' + d.getMinutes() + ':' + d.getSeconds();
     return(
       <tr>
-        <th style={this.th}>No, {this.props.index}</th>
+        <th style={this.th}>No. {this.props.index}</th>
         <td style={this.td}>{this.props.value.message}</td>
-        <td styel={this.date}>{f}</td>
+        <td styel={this.date}>{this.props.value.created}</td>
       </tr>
     );
   }
